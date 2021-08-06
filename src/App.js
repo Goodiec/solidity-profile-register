@@ -1,0 +1,88 @@
+import React from 'react'
+import './App.css'
+import web3 from './web3';
+import profile from './profile';
+
+class App extends React.Component {
+  state = {
+    profiles: [],
+    profileIds: [],
+    message:'',
+    firstName: '',
+    lastName: '',
+    amount: ''
+  };
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  async componentDidMount(){
+    const profiles = await profile.methods.Profiles().call();
+    const profileIds = await profile.methods.ProfileIds().call();
+    this.setState({profiles, profileIds});
+  };
+
+  onSubmit = async e => {
+    e.preventDefault();
+    const accounts = await web3.eth.getAccounts();
+    const userData = {
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+    };
+    console.log(userData)
+    console.log('Attempting to deploy from account', accounts[0]);
+
+    this.setState({message: 'Waiting on transaction success...'});
+    
+    await profile.methods.createProfile().send({
+      from: accounts[0],
+      value: web3.utils.toWei(this.state.amount, 'ether')
+    });
+    this.setState({message: 'Registeration was successfull'});
+    
+  };
+
+  render(){
+  return (
+    <div>
+      <h2>Register your profile</h2>
+      <hr/>
+      <form onSubmit={this.onSubmit}>
+        <h4>Register your profile</h4>
+        <div>
+          <label>Amount of ether to enter</label>
+            <input 
+              value = {this.state.amount}
+              onChange={this.onChange}
+              type='text'
+              name='amount'
+              className='form-control'
+          />
+          <label>First Name</label><br/>
+          <input 
+            value = {this.state.firstName}
+            onChange={this.onChange}
+            type='text'
+            placeholder='First Name'
+            name='firstName'
+            className='form-control'
+          /><br/>
+          <label>Last Name</label><br/>
+          <input 
+            value = {this.state.lastName}
+            onChange={this.onChange}
+            type='text'
+            placeholder='Last Name'
+            name='lastName'
+            className='form-control'
+          />
+        </div><br/>
+        <button className="btn btn-primary">Register</button>
+      </form>
+      <h1>{this.state.message}</h1>
+    </div>
+  );
+}
+}
+
+export default App;
