@@ -32,7 +32,8 @@ const abi =
         "inputs":[],
         "name":"REGISTRATION_FEE",
         "outputs":[{"internalType":"uint256","name":"","type":"uint256"}],
-        "payable":false,"stateMutability":"view","type":"function"},
+        "payable":false,"stateMutability":"view","type":"function"
+    },
     {
         "constant":false,
         "inputs":[{"internalType":"string","name":"lastname","type":"string"},{"internalType":"string","name":"firstname","type":"string"}],

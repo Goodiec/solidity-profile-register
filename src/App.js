@@ -5,22 +5,18 @@ import profile from './profile';
 
 class App extends React.Component {
   state = {
-    profiles: [],
-    profileIds: [],
     message:'',
     firstName: '',
     lastName: '',
-    amount: ''
   };
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  async componentDidMount(){
-    const profiles = await profile.methods.Profiles().call();
-    const profileIds = await profile.methods.ProfileIds().call();
-    this.setState({profiles, profileIds});
-  };
+  // async componentDidMount(){
+  //   const profiles = await profile.methods.getProfile().call();
+  //   this.setState({profiles});
+  // };
 
   onSubmit = async e => {
     e.preventDefault();
@@ -34,12 +30,11 @@ class App extends React.Component {
 
     this.setState({message: 'Waiting on transaction success...'});
     
-    await profile.methods.createProfile().send({
+    await profile.methods.createProfile(this.state.firstName, this.state.lastName).send({
       from: accounts[0],
-      value: web3.utils.toWei(this.state.amount, 'ether')
+      value: web3.utils.toWei(0.01, 'ether')
     });
     this.setState({message: 'Registeration was successfull'});
-    
   };
 
   render(){
@@ -48,16 +43,7 @@ class App extends React.Component {
       <h2>Register your profile</h2>
       <hr/>
       <form onSubmit={this.onSubmit}>
-        <h4>Register your profile</h4>
         <div>
-          <label>Amount of ether to enter</label>
-            <input 
-              value = {this.state.amount}
-              onChange={this.onChange}
-              type='text'
-              name='amount'
-              className='form-control'
-          />
           <label>First Name</label><br/>
           <input 
             value = {this.state.firstName}
@@ -80,6 +66,9 @@ class App extends React.Component {
         <button className="btn btn-primary">Register</button>
       </form>
       <h1>{this.state.message}</h1>
+      <div id="users-table">
+
+      </div>
     </div>
   );
 }
