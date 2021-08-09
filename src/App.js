@@ -13,10 +13,10 @@ class App extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  async componentDidMount(){
-    const profiles = await profile.methods.getProfile().call();
-    console.log(profiles);
-  };
+  // async componentDidMount(){
+  //   const profiles = await profile.methods.createProfile(this.state.firstName, this.state.lastName).call();
+  //   console.log(profiles);
+  // };
 
   onSubmit = async e => {
     e.preventDefault();
@@ -30,11 +30,13 @@ class App extends React.Component {
 
     this.setState({message: 'Waiting on transaction success...'});
     
-    await profile.methods.createProfile(this.state.firstName, this.state.lastName).send({
+    const profiles = await profile.methods.createProfile(this.state.firstName, this.state.lastName).send({
       from: accounts[0],
-      value: web3.utils.toWei(0.01, 'ether')
+      value: web3.utils.toWei('0.01', 'ether')
     });
     this.setState({message: 'Registeration was successfull'});
+    console.log(profiles);
+
   };
 
   render(){
