@@ -13,10 +13,10 @@ class App extends React.Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  // async componentDidMount(){
-  //   const profiles = await profile.methods.getProfile().call();
-  //   this.setState({profiles});
-  // };
+  async componentDidMount(){
+    const profiles = await profile.methods.getProfile().call();
+    console.log(profiles);
+  };
 
   onSubmit = async e => {
     e.preventDefault();
